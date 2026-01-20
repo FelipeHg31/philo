@@ -6,13 +6,13 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:12 by juan-her          #+#    #+#             */
-/*   Updated: 2025/12/17 21:16:27 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/01/20 18:16:39 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int ft_data(int ac, char **ag, t_general *data)
+static int	ft_data(int ac, char **ag, t_general *data)
 {
 	if (ac < 5 || ac > 6)
 	{
@@ -27,24 +27,47 @@ static int ft_data(int ac, char **ag, t_general *data)
 	return (1);
 }
 
+static void	ft_init(t_general *d)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_init(&(*d).die, NULL);
+	pthread_mutex_init(&(*d).meals, NULL);
+	while (i < (*d).count)
+	{
+		pthread_mutex_init(&(*d).philos[i].last_meal, NULL);
+		pthread_create(&(*d).philos[i].thread, NULL,
+			ft_routine, &(*d).philos[i]);
+		i++;
+	}
+}
+
+static void	ft_kill(t_general *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < (*data).count)
+	{
+		pthread_mutex_destroy(&(*data).philos[i].last_meal);
+		pthread_mutex_destroy(&(*data).forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&(*data).write);
+	pthread_mutex_destroy(&(*data).die);
+	pthread_mutex_destroy(&(*data).meals);
+}
+
 int	main(int ac, char **ag)
 {
 	t_general	data;
-	int i;
+	int			i;
 
-	i = 0;
 	if (!ft_data(ac, ag, &data))
 		return (1);
 	data.time = ft_get_time();
-	pthread_mutex_init(&data.write, NULL);
-	pthread_mutex_init(&data.die, NULL);
-	pthread_mutex_init(&data.meals, NULL);
-	while (i < data.count)
-	{
-		pthread_mutex_init(&data.philos[i].last_meal, NULL);
-		pthread_create(&data.philos[i].thread, NULL, ft_philo_routine, &data.philos[i]);
-		i++;
-	}
+	ft_init(&data);
 	pthread_create(&data.monitoring, NULL, ft_monitoring, &data);
 	pthread_join(data.monitoring, NULL);
 	i = 0;
@@ -53,16 +76,7 @@ int	main(int ac, char **ag)
 		pthread_join(data.philos[i].thread, NULL);
 		i++;
 	}
-	i = 0;
-	while (i < data.count)
-	{
-		pthread_mutex_destroy(&data.philos[i].last_meal);
-		pthread_mutex_destroy(&data.forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&data.write);
-	pthread_mutex_destroy(&data.die);
-	pthread_mutex_destroy(&data.meals);
+	ft_kill(&data);
 	free(data.philos);
 	free(data.forks);
 	data.philos = NULL;

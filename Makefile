@@ -6,14 +6,14 @@
 #    By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/10 05:57:29 by juan-her          #+#    #+#              #
-#    Updated: 2025/12/17 16:34:44 by juan-her         ###   ########.fr        #
+#    Updated: 2026/01/20 18:58:31 by juan-her         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g3
 NAME = philo
-SRC = main.c init.c utils.c philo.c
+SRC = main.c init.c utils.c philo.c monitoring.c
 OBJ_URL = ./obj
 OBJ = $(SRC:%.c=$(OBJ_URL)/%.o)
 RM = rm -fr

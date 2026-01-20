@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:59 by juan-her          #+#    #+#             */
-/*   Updated: 2025/12/17 21:15:30 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/01/20 18:16:15 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int				ft_init_data(t_general *general, char **ag);
 void			ft_print_message(t_philo *philo, char *message);
 int				ft_is_dead(t_general *gen);
 void			ft_usleep(unsigned long time, t_general *gen);
-void			*ft_philo_routine(void *arg);
+void			*ft_routine(void *arg);
 void			*ft_monitoring(void *data);
 
-# endif
+#endif

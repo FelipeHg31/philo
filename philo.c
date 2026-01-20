@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:17 by juan-her          #+#    #+#             */
-/*   Updated: 2025/12/17 22:07:06 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/01/20 19:06:43 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,27 @@ static int	ft_take_forks(t_philo *philo)
 		ft_print_message(philo, "has taken a fork");
 		pthread_mutex_lock(&philo->general->forks[philo->left_fork]);
 	}
-	ft_print_message(philo, "has taken a fork");
-	return (1);
+	return (ft_print_message(philo, "has taken a fork"), 1);
 }
 
-void	*ft_philo_routine(void *philo_data)
+static int	ft_is_one(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)philo_data;
 	if (philo->general->count == 1)
 	{
 		ft_print_message(philo, "has taken a fork");
 		ft_usleep(philo->general->time_die, philo->general);
-		return (NULL);
+		return (1);
 	}
+	return (0);
+}
+
+void	*ft_routine(void *philo_data)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)philo_data;
+	if (ft_is_one(philo))
+		return (NULL);
 	if (philo->id % 2 == 0)
 		usleep(500);
 	while (!ft_is_dead(philo->general))
@@ -85,65 +91,6 @@ void	*ft_philo_routine(void *philo_data)
 		ft_drop_forks(philo);
 		ft_print_message(philo, "is sleeping");
 		ft_usleep(philo->general->time_sleep, philo->general);
-	}
-	return (NULL);
-}
-
-static int	ft_count_meals(t_general *gen)
-{
-	int	i;
-
-	if (!gen->meals_needed)
-		return (0);
-
-	pthread_mutex_lock(&gen->meals);
-	i = 0;
-	while (i < gen->count)
-	{
-		if (gen->philos[i].count_meals < gen->meals_needed)
-		{
-			pthread_mutex_unlock(&gen->meals);
-			return (0);
-		}
-		i++;
-	}
-	pthread_mutex_unlock(&gen->meals);
-	return (1);
-}
-
-void	*ft_monitoring(void *data)
-{
-	t_general	*gen;
-	int			i;
-
-	gen = (t_general *) data;
-	while (1)
-	{
-		i = 0;
-		while (i < gen->count)
-		{
-			pthread_mutex_lock(&gen->philos[i].last_meal);
-			if ((ft_get_time() - gen->philos[i].time_meal) > gen->time_die)
-			{
-				pthread_mutex_unlock(&gen->philos[i].last_meal);
-				ft_print_message(&gen->philos[i], "died");
-				pthread_mutex_lock(&gen->die);
-				gen->deaths = 1;
-				pthread_mutex_unlock(&gen->die);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&gen->philos[i].last_meal);
-			i++;
-		}
-		if (gen->meals_needed && ft_count_meals(gen))
-		{
-			ft_print_message(&gen->philos[0], "all eat");
-			pthread_mutex_lock(&gen->die);
-			gen->deaths = 1;
-			pthread_mutex_unlock(&gen->die);
-			return (NULL);
-		}
-		usleep(500);
 	}
 	return (NULL);
 }
