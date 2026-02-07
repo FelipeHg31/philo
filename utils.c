@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 15:55:34 by juan-her          #+#    #+#             */
-/*   Updated: 2025/12/17 21:47:43 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:43:44 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,12 @@ void	ft_print_message(t_philo *philo, char *message)
 {
 	unsigned long	time;
 
-	pthread_mutex_lock(&philo->general->die);
-	if (philo->general->deaths)
-	{
-		pthread_mutex_unlock(&philo->general->die);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->general->die);
 	pthread_mutex_lock(&philo->general->write);
-	time = ft_get_time() - philo->general->time;
-	printf("%lu ms %d %s\n", time, philo->id, message);
+	if (!ft_is_dead(philo->general))
+	{
+		time = ft_get_time() - philo->general->time;
+		printf("%lu ms %d %s\n", time, philo->id, message);
+	}
 	pthread_mutex_unlock(&philo->general->write);
 }
 
@@ -69,6 +65,6 @@ void	ft_usleep(unsigned long time, t_general *gen)
 	{
 		if (ft_get_time() - start >= time)
 			break ;
-		usleep(100);
+		usleep(50);
 	}
 }

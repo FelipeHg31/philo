@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 18:55:30 by juan-her          #+#    #+#             */
-/*   Updated: 2026/02/07 23:07:55 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:51:46 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	*ft_monitoring(void *data)
 		while (i < gen->count)
 		{
 			pthread_mutex_lock(&gen->philos[i].last_meal);
-			if ((ft_get_time() - gen->philos[i].time_meal) > gen->time_die)
+			if ((ft_get_time() - gen->philos[i].time_meal) >= gen->time_die)
 			{
 				pthread_mutex_unlock(&gen->philos[i].last_meal);
 				ft_print_message(&gen->philos[i], "died");
@@ -77,7 +77,7 @@ void	*ft_monitoring(void *data)
 		}
 		if (ft_all_eat(gen))
 			return (NULL);
-		usleep(500);
+		usleep(50);
 	}
 	return (NULL);
 }

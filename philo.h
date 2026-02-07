@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:59 by juan-her          #+#    #+#             */
-/*   Updated: 2026/01/20 18:16:15 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:16:00 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef struct s_general
 	t_philo			*philos;
 	pthread_t		monitoring;
 	pthread_mutex_t	die;
-	pthread_mutex_t	meals;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write;
 }	t_general;

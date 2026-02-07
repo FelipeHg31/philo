@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:12 by juan-her          #+#    #+#             */
-/*   Updated: 2026/01/20 18:16:39 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:16:30 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void	ft_init(t_general *d)
 
 	i = 0;
 	pthread_mutex_init(&(*d).die, NULL);
-	pthread_mutex_init(&(*d).meals, NULL);
 	while (i < (*d).count)
 	{
 		pthread_mutex_init(&(*d).philos[i].last_meal, NULL);
@@ -56,7 +55,6 @@ static void	ft_kill(t_general *data)
 	}
 	pthread_mutex_destroy(&(*data).write);
 	pthread_mutex_destroy(&(*data).die);
-	pthread_mutex_destroy(&(*data).meals);
 }
 
 int	main(int ac, char **ag)
