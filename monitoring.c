@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 18:55:30 by juan-her          #+#    #+#             */
-/*   Updated: 2026/01/20 19:33:29 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:07:55 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@ static int	ft_count_meals(t_general *gen)
 
 	if (!gen->meals_needed)
 		return (0);
-	pthread_mutex_lock(&gen->meals);
 	i = 0;
 	while (i < gen->count)
 	{
+		pthread_mutex_lock(&gen->philos[i].last_meal);
 		if (gen->philos[i].count_meals < gen->meals_needed)
 		{
-			pthread_mutex_unlock(&gen->meals);
+			pthread_mutex_unlock(&gen->philos[i].last_meal);
 			return (0);
 		}
+		pthread_mutex_unlock(&gen->philos[i].last_meal);
 		i++;
 	}
-	pthread_mutex_unlock(&gen->meals);
 	return (1);
 }
 

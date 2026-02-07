@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:17 by juan-her          #+#    #+#             */
-/*   Updated: 2026/01/20 19:06:43 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:11:30 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void	*ft_routine(void *philo_data)
 		ft_print_message(philo, "is eating");
 		ft_usleep(philo->general->time_eat, philo->general);
 		ft_drop_forks(philo);
+		if (ft_is_dead(philo->general))
+			break ;
 		ft_print_message(philo, "is sleeping");
 		ft_usleep(philo->general->time_sleep, philo->general);
 	}
