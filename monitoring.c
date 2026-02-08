@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 18:55:30 by juan-her          #+#    #+#             */
-/*   Updated: 2026/02/07 23:51:46 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/08 00:35:59 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,18 @@ static int	ft_all_eat(t_general *gen)
 	return (0);
 }
 
-static void	ft_add_death(t_general *gen)
+static void	ft_add_death(t_general *gen, int i)
 {
+	pthread_mutex_lock(&gen->write);
 	pthread_mutex_lock(&gen->die);
-	gen->deaths = 1;
+	if (!gen->deaths)
+	{
+		gen->deaths = 1;
+		printf("%lu ms %d %s\n",
+			ft_get_time() - gen->time, gen->philos[i].id, "died");
+	}
 	pthread_mutex_unlock(&gen->die);
+	pthread_mutex_unlock(&gen->write);
 }
 
 void	*ft_monitoring(void *data)
@@ -65,11 +72,10 @@ void	*ft_monitoring(void *data)
 		while (i < gen->count)
 		{
 			pthread_mutex_lock(&gen->philos[i].last_meal);
-			if ((ft_get_time() - gen->philos[i].time_meal) >= gen->time_die)
+			if ((ft_get_time() - gen->philos[i].time_meal) > gen->time_die)
 			{
 				pthread_mutex_unlock(&gen->philos[i].last_meal);
-				ft_print_message(&gen->philos[i], "died");
-				ft_add_death(gen);
+				ft_add_death(gen, i);
 				return (NULL);
 			}
 			pthread_mutex_unlock(&gen->philos[i].last_meal);

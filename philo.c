@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 03:04:17 by juan-her          #+#    #+#             */
-/*   Updated: 2026/02/07 23:49:53 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/02/08 00:30:48 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	*ft_routine(void *philo_data)
 		ft_usleep(philo->general->time_eat / 2, philo->general);
 	while (!ft_is_dead(philo->general))
 	{
+		if (ft_is_dead(philo->general))
+			break ;
 		ft_print_message(philo, "is thiking");
 		if (!ft_take_forks(philo))
 			break ;
@@ -86,8 +88,6 @@ void	*ft_routine(void *philo_data)
 		philo->time_meal = ft_get_time();
 		philo->count_meals++;
 		pthread_mutex_unlock(&philo->last_meal);
-		if (ft_is_dead(philo->general))
-			break ;
 		ft_print_message(philo, "is eating");
 		ft_usleep(philo->general->time_eat, philo->general);
 		ft_drop_forks(philo);
